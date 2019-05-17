@@ -25,6 +25,10 @@ def _deep_put(_dict, keys, value):
     value: the value to add at the nested path
 
     returns the modified input dictionary
+
+    NOTE: this takes advantage of the face that Python stores values by
+    reference. Since `traverse_dict` is referencing the same memory as the
+    input `_dict`, modifying it also modifies `_dict`.
     """
     traverse_dict = _dict
     for i, key in enumerate(keys[:-1]):

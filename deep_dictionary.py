@@ -1,5 +1,14 @@
 
 def _deep_get(_dict, keys, default=None):
+    """
+    Recursive function for finding a nested dict.
+
+    _dict: the dictionary to search over
+    keys: list of keys defining the nested path
+    default: optional value to return when the given path is not found
+
+    returns the nested dictionary
+    """
     for key in keys:
         if isinstance(_dict, dict):
             _dict = _dict.get(key, default)
@@ -9,7 +18,13 @@ def _deep_get(_dict, keys, default=None):
 
 def _deep_put(_dict, keys, value):
     """
-    add a key with `value` at the path given in `keys`
+    A function for putting a given value at a key path.
+
+    _dict: the input dictionary to modify
+    keys: list of keys defining the nested path
+    value: the value to add at the nested path
+
+    returns the modified input dictionary
     """
     traverse_dict = _dict
     for i, key in enumerate(keys[:-1]):
@@ -21,7 +36,16 @@ def _deep_put(_dict, keys, value):
 
 def _deep_replace(_dict, keys, value):  
     """
-    replace the value of the last key in `keys` with `value`
+    A function for replacing the value of an existing key.
+
+    _dict: the input dictionary to modify
+    keys: list of keys defining the nested path
+    value: the value to add at the nested path
+
+    returns the modified input dictionary
+
+    NOTE: I thought this would actually be necessary but as it turns out its
+    not. Oh well.
     """
     return _deep_put(
         _dict,

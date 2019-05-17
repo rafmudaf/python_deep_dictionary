@@ -11,10 +11,6 @@ def _deep_put(_dict, keys, value):
     """
     add a key with `value` at the path given in `keys`
     """
-    # first verify the key does not exists at the given path
-    if _deep_get(_dict, keys) is not None:
-        raise KeyError
-
     traverse_dict = _dict
     for i, key in enumerate(keys[:-1]):
         traverse_dict = traverse_dict.get(key)
@@ -23,31 +19,15 @@ def _deep_put(_dict, keys, value):
             break            
     return _dict
 
-# def _deep_put(_dict, keys, value):
-#     """
-#     replace the value of the last key in `keys` with `value`
-#     """
-#     import copy
-
-#     # first verify the key exists
-#     if _deep_get(_dict, keys) is None:
-#         raise KeyError
-
-#     temp_dict = copy.deepcopy(_dict)
-
-#     # look for the last key-value pair in input
-#     # and reset its value
-#     for i, key in enumerate(keys[0:-1]):
-#         temp_dict[key] = _dict.get(key)
-
-#         # -1 for starting at 0
-#         # -1 for iterating over all keys except the last
-#         if i == len(keys) - 1 - 1:
-#             print("key is: ", key)
-#             print({keys[-1]: value})
-#             temp_dict[key] = {keys[-1]: value}
-
-#     return temp_dict
+def _deep_replace(_dict, keys, value):  
+    """
+    replace the value of the last key in `keys` with `value`
+    """
+    return _deep_put(
+        _dict,
+        keys,
+        value
+    )
 
 if __name__=="__main__":
     base_dictionary = {
@@ -71,3 +51,8 @@ if __name__=="__main__":
     put_dictionary =_deep_put(base_dictionary, ["k1.1", "k2.1", "k3.2"], "v3.2")
     print(_deep_get(put_dictionary, ["k1.1", "k2.1"]))
     print(put_dictionary)
+
+    # replace the k3.1 dictionary
+    replace_dictionary = _deep_replace(put_dictionary, ["k1.1", "k2.1", "k3.1"], "replaced")
+    print(_deep_get(replace_dictionary, ["k1.1", "k2.1", "k3.1"]))
+    print(replace_dictionary)

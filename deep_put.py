@@ -8,7 +8,31 @@ def _deep_get(_dict, keys, default=None):
     return _dict
 
 def _deep_put(_dict, keys, value):
+    """
+    add a key with `value` at the path given in `keys`
+    """
+    import copy
 
+    # first verify the key does not exists at the given path
+    if _deep_get(_dict, keys) is not None:
+        raise KeyError
+
+    dict_list = []
+    temp_dict = copy.deepcopy(_dict)
+    traverse_dict = copy.deepcopy(_dict)
+
+    # store the successive dictionaries in a list
+    for i, key in enumerate(keys[:-1]):
+        traverse_dict = traverse_dict.get(key)
+        dict_list.append(traverse_dict)
+
+    # add the new key-value
+    dict_list[-1][keys[-1]] = value
+
+    dd = dict_list[0]
+    temp_dict[keys[0]] = dd
+            
+    return temp_dict
 
 # def _deep_put(_dict, keys, value):
 #     """
@@ -38,30 +62,23 @@ def _deep_put(_dict, keys, value):
 
 if __name__=="__main__":
     base_dictionary = {
-        "a0": {
-            "a": "b"
-        },
-        "a1": {
-            "b0": "b",
-            "b1": {
-                "c0": "c",
+        "k1.1": {
+            "k2.1": {
+                "k3.1": "v3.1",
                 # this is what I want to put
-                # "c1": {
-                #     "d0": "d"
+                # "k3.2": {
+                #     "v3.2"
                 # }
-            }
+            },
+            "k2.2": "v2.2"
         },
-        "a2": {
-            "b2": {
-                "c2": {
-                    "d2": "d"
-                }
-            }
-        }
+        "k1.2": "v1.2"
     }
 
-    get_d = _deep_get(base_dictionary, ["a1", "b1", "c1"])
-    print(get_d)
-    put_d = _deep_put(base_dictionary, ["a1", "b1", "c1"], {"e0": "e"})
-    print(put_d)
-    print(_deep_get(put_d, ["a1", "b1", "c1"]))
+    # show the b1 dictionary
+    print(_deep_get(base_dictionary, ["k1.1", "k2.1"]))
+
+    # add the c1 dictionary
+    put_dictionary =_deep_put(base_dictionary, ["k1.1", "k2.1", "k3.2"], "v3.2")
+    print(_deep_get(put_dictionary, ["k1.1", "k2.1"]))
+    print(put_dictionary)
